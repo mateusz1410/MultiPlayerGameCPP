@@ -1,0 +1,71 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+#pragma once
+
+#include "CoreMinimal.h"
+#include "GameFramework/Character.h"
+#include "ShooterCharacter.generated.h"
+
+UCLASS()
+class MULTIPLAYERGAMECPP_API AShooterCharacter : public ACharacter
+{
+	GENERATED_BODY()
+
+public:
+	// Sets default values for this character's properties
+	AShooterCharacter();
+
+protected:
+
+
+	void Interact();
+
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+		class USkeletalMeshComponent* MeshTPP;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+		class USpringArmComponent* SpringArm;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+		class UCameraComponent* CameraComp;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+		USkeletalMeshComponent* SK_Weapon;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+		USkeletalMeshComponent* SK_Weapon_TPP;
+
+
+
+	void MoveForward(float Value);
+
+	void MoveRight(float Value);
+
+
+
+public:
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+
+	// Called to bind functionality to input
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	void InteractMessage(); //test
+
+
+	void RegisterInteractObject(class APickupableItem* InteractActor);
+
+	void RemoveInteractObject();
+
+protected:
+
+	UPROPERTY(Replicated, BlueprintReadOnly, VisibleAnywhere, Category = "Interaction")
+	APickupableItem* InteractObject;
+
+	UFUNCTION(Server, Reliable,WithValidation)
+	void ServerInteract();
+
+};
